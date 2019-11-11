@@ -11,6 +11,7 @@ namespace BatchClient
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Formatting;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace BatchClient
         private BatchClient(HttpClient client)
         {
             this.client = client;
-            speechToTextBasePath = "api/speechtotext/v2.0/";
+            speechToTextBasePath = "api/speechtotext/v2.1/";
         }
 
         public static async Task<BatchClient> CreateApiV1ClientAsync(string username, string key, string hostName, int port)
@@ -170,10 +171,10 @@ namespace BatchClient
         {
 
             string res = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
+            StringContent sc = new StringContent(res);
+            sc.Headers.ContentType = JsonMediaTypeFormatter.DefaultMediaType;
 
-
-
-            using (var response = await this.client.PostAsJsonAsync(path, payload).ConfigureAwait(false))
+            using (var response = await client.PostAsync(path, sc))
             {
                 return await GetLocationFromPostResponseAsync(response).ConfigureAwait(false);
             }
