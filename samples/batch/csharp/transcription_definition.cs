@@ -14,7 +14,7 @@ namespace BatchClient
         {
             this.Name = name;
             this.Description = description;
-            this.RecordingsUrl = recordingsUrl;
+            this.RecordingsUrls = new Uri[] { recordingsUrl };
             this.Locale = locale;
             this.Models = models;
             this.properties = new Dictionary<string, string>();
@@ -30,7 +30,7 @@ namespace BatchClient
         public string Description { get; set; }
 
         /// <inheritdoc />
-        public Uri RecordingsUrl { get; set; }
+        public Uri[] RecordingsUrls { get; set; }
 
         public string Locale { get; set; }
 
@@ -44,7 +44,7 @@ namespace BatchClient
             string locale,
             Uri recordingsUrl)
         {
-            return TranscriptionDefinition.Create(name, description, locale, recordingsUrl, null);
+            return TranscriptionDefinition.Create(name, description, locale, recordingsUrl, new ModelIdentity[0]);
         }
 
         public static TranscriptionDefinition Create(
